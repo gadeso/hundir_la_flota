@@ -26,13 +26,14 @@ def generar_tablero(tablero, lista_barcos):
 def disparo_jugador(tablero_enemigo, x, y):
     if tablero_enemigo[x, y] == 'O':
         tablero_enemigo[x, y] = 'X'
-        return tablero_enemigo, True
+        barco_destruido = verificar_barco_destruido(tablero_enemigo, x, y)
+        return tablero_enemigo, True, barco_destruido
     elif tablero_enemigo[x, y] == ' ':
         tablero_enemigo[x, y] = '-'
-        return tablero_enemigo, False
+        return tablero_enemigo, False, False
     else:
         print(MENU["repetido"])
-        return tablero_enemigo, False
+        return tablero_enemigo, False, False
 
 def disparo_enemigo(tablero_jugador):
     while True:
@@ -44,3 +45,18 @@ def disparo_enemigo(tablero_jugador):
         elif tablero_jugador[x, y] == ' ':
             tablero_jugador[x, y] = '-'
             return tablero_jugador, False
+
+def verificar_barco_destruido(tablero, x, y):
+    # Verifica si el barco al que pertenece (x, y) ha sido destruido completamente
+    eslora = 1
+    for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+        nx, ny = x + dx, y + dy
+        while 0 <= nx < 10 and 0 <= ny < 10 and tablero[nx, ny] == 'X':
+            eslora += 1
+            nx += dx
+            ny += dy
+        nx, ny = x - dx, y - dy
+        while 0 <= nx < 10 and 0 <= ny < 10 and tablero[nx, ny] == 'O':
+            return False  # Aún queda parte del barco sin destruir
+
+    return True
