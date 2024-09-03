@@ -18,7 +18,7 @@ def generar_tablero(tablero, lista_barcos):
             elif orient == 'S' and fila + eslora <= 10 and 'O' not in tablero[fila:fila+eslora, col]:
                 tablero[fila:fila+eslora, col] = 'O'
                 break
-            elif orient == 'O' and col - eslora >= 0 and 'O' not in tablero[fila, col-eslora+1:col+1]:
+            elif orient == 'O' and col-eslora >= 0 and 'O' not in tablero[fila, col-eslora+1:col+1]:
                 tablero[fila, col-eslora+1:col+1] = 'O'
                 break
     return tablero
@@ -47,7 +47,6 @@ def disparo_enemigo(tablero_jugador):
             return tablero_jugador, False
 
 def verificar_barco_destruido(tablero, x, y):
-    # Verifica si el barco al que pertenece (x, y) ha sido destruido completamente
     eslora = 1
     for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
         nx, ny = x + dx, y + dy
@@ -57,6 +56,6 @@ def verificar_barco_destruido(tablero, x, y):
             ny += dy
         nx, ny = x - dx, y - dy
         while 0 <= nx < 10 and 0 <= ny < 10 and tablero[nx, ny] == 'O':
-            return False  # Aún queda parte del barco sin destruir
+            return False
 
     return True
